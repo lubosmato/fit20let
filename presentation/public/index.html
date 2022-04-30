@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>FestivalFIT: Docker on CICD</title>
+    <link rel="stylesheet" href="app.css">
+  </head>
+  
+  <body>
+
+    <textarea id="source">
+
+class: main, dark
+
+# Docker on CICD
+
+<div class="footer-left">Ondřej Beňuš<br />R&D TEM</div>
+<div class="footer-right">2022-04-30</div>
+
+---
+
+# Baseline
+
+* Language
+  * English
+  * Czech
+* Operating systems
+    * Windows 10/11
+        * x64
+        * arm64 
+    * Linux
+* Git (or other version control system)
+* Docker
+* Internet access
+
+
+---
+
+
+# Presentation
+
+https://festival-fit.gitlab.io/presentation
+
+Expectations
+
+---
+
+# Agenda
+
+* Installation
+  * Docker
+* What is Version Control System
+  * Theory
+  * Git
+  * GitLab (+ registration and project creation)
+* What is CI/CD
+  * Theory
+  * GitLab-runner (+ instalaltion and the first pipeline)
+* What is Docker
+  * Theory
+  * Docker
+* Docker on CI/CD
+
+---
+
+class: dark
+
+# Installation
+
+* Linux
+* Windows
+  * WSL2
+  * [optional] HyperV
+  * Kernel patch
+  * Docker Desktop
+* Test
+
+---
+
+# Installation - Docker
+
+## Linux
+
+* Ubuntu: https://docs.docker.com/engine/install/ubuntu/
+* Debian: https://docs.docker.com/engine/install/debian/
+* Fedora: https://docs.docker.com/engine/install/fedora/
+
+---
+
+# Installation - Docker
+
+## Windows - WSL2
+
+Administrator PowerShell:
+```ps
+wsl --install
+```
+
+---
+
+# Installation - Docker
+
+## Windows - [optional] HyperV
+
+This will allow you to run Windows Containers.
+
+---
+
+# Installation - Docker
+
+## Windows - kernel patch
+
+It will tell you to install the kernel patch.
+
+(x64) https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi
+
+
+---
+
+# Installation - Docker
+
+## Windows - Docker Desktop
+
+https://www.docker.com/products/docker-desktop/
+
+
+---
+
+class: dark
+
+# Version Control System
+* Theory
+* Git
+* GitLab (+ registration and project creation)
+
+---
+
+# Version control system - Theory
+
+* Enables large scale colaboration
+* Helps us to track changes
+* Merging changes
+* "The place, where the code is"
+
+---
+
+# Version control system - Git
+
+![](master.png)
+
+<div class="footer-left">source: https://www.cnblogs.com/xueweihan/p/13524162.html</div>
+
+---
+
+# Version control system - Git
+
+![](master-feature.png)
+
+<div class="footer-left">source: https://www.cnblogs.com/xueweihan/p/13524162.html</div>
+
+---
+
+# Version control system - Git
+
+![](master-develop-feature-hotfix.png)
+
+<div class="footer-left">source: https://www.cnblogs.com/xueweihan/p/13524162.html</div>
+
+---
+
+# Version control system - GitLab
+
+* Web GUI to manage projects, branches, commits, pipelines, etc.
+* Available to deploy in your company
+* Has integrated CI/CD 
+
+# Other systems
+* GitHub
+* Bitbucket
+* Phabricator
+* ...
+
+---
+
+# Version control system - GitLab
+
+Festival FIT group:
+* https://gitlab.com/festival-fit
+* GroupID: 52369810
+
+<br>
+
+Tasks:
+* Join the group [optional] - If you do not want to publish your e-mail, you can use: https://10minutemail.com/
+* Create a new **private** project. Private is important, otherwise I will hack your computer.
+
+---
+
+class: dark
+
+# CI/CD
+
+* Theory
+* GitLab-runner
+* GitLab-runner pipeline
+
+---
+
+# CI/CD
+
+Continuous Integration/Continuous Deployment
+* CI/CD is a process of automating the deployment of software.
+* Operates on your source
+* Can do checks, tests, builds, deployments, etc.
+
+Usually, you do subset of these steps:
+
+1. Lint
+1. Build
+1. Test
+1. Deploy
+
+---
+
+# CI/CD - GitLab
+
+```yml
+stages:          # List of stages for jobs, and their order of execution
+  - build
+
+build-job:       # This job runs in the build stage, which runs first.
+  stage: build
+  script:
+    - echo "Compiling the code..."
+    - echo "Compile complete."
+```
+
+---
+  
+```yml
+stages:          # List of stages for jobs, and their order of execution
+  - build
+  - test
+  - deploy
+
+build-job:       # This job runs in the build stage, which runs first.
+  stage: build
+  tags:
+    - "win-laptop"
+  script:
+    - echo "Compiling the code..."
+    - echo "Compile complete."
+
+unit-test-job:   # This job runs in the test stage.
+  stage: test    # It only starts when the job in the build stage completes successfully.
+  tags:
+    - "win-laptop"
+  script:
+    - echo "Running unit tests... This will take about 60 seconds."
+    - sleep 60
+    - echo "Code coverage is 90%"
+
+lint-test-job:   # This job also runs in the test stage.
+  stage: test    # It can run at the same time as unit-test-job (in parallel).
+  tags:
+    - "win-laptop"
+  script:
+    - echo "Linting code... This will take about 10 seconds."
+    - sleep 10
+    - echo "No lint issues found."
+
+deploy-job:      # This job runs in the deploy stage.
+  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  tags:
+    - "win-laptop"
+  script:
+    - echo "Deploying application..."
+    - echo "Application successfully deployed."
+```
+
+---
+
+# CI/CD - GitLab - Runner
+
+* Go to your project
+* Click on the **Settings**
+* Click on the **CI/CD**
+* Expand the **Runners** section
+* In the left part, you can add Runner, you have there also instructions how to install and register it
+
+> **Note:** Pay attention to the **tags** as those indentifies what job will be scheduled to what runner/executor
+
+> **Warning:** On some installations, gitlab-runner tries to run `pwsh.exe` that is not available on your system. In order to fix it, edit `C:\Gitlab-runner\config.toml` and change the value of `shell` to `powershell`.
+
+---
+
+# CI/CD - GitLab - Pipeline
+
+```yml
+stages:          # List of stages for jobs, and their order of execution
+  - build
+
+build-job:       # This job runs in the build stage, which runs first.
+  stage: build
+  tags:
+    - "my-tag"
+  script:
+    - echo "Compiling the code..."
+    - New-Item -Path "C:\\builds\\Public\\build" -ItemType Directory
+    - echo "Compile complete."
+```
+
+---
+
+class: dark
+
+# Docker
+
+* Containers
+* GitLab-runner
+* Dockerfile
+
+---
+
+# Docker - Containers
+
+All you need to know is that Containers are a way to run applications on your computer in a separate environment, so it is completely isolated from your system.
+
+Docker in 100s https://youtu.be/Gjnup-PuquQ
+
+---
+
+# Docker - Containers
+
+![](PC.svg)
+
+---
+
+# Docker - Containers
+
+![](Containerless.svg)
+
+---
+
+# Docker - Containers
+
+![](container.svg)
+
+---
+
+# Docker - GitLab-runner
+
+* make sure, the docker is installed properly by running `docker run hello-world`
+* register new executor `docker`
+* schedule new job
+
+---
+
+# Docker - GitLab-runner
+
+![](many-wow-so-much-wow.jpg)
+
+---
+
+# Docker - Dockerfile
+
+---
+
+class: dark
+
+# Docker on CI/CD
+
+    </textarea>
+
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+    <script>
+      var slideshow = remark.create({
+        countIncrementalSlides: false,
+        ratio: "16:9",
+      });
+    </script>
+  </body>
+
+
+</html>
+

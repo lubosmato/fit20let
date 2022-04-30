@@ -1,0 +1,13 @@
+image: alpine:latest
+
+pages:
+  tags:
+    - "linux-docker"
+  stage: deploy
+  script:
+  - echo 'Nothing to do...'
+  artifacts:
+    paths:
+    - public
+  only:
+  - master

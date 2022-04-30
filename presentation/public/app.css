@@ -1,0 +1,198 @@
+@page {
+    size: 1024px 768px;
+    margin: 0;
+}
+
+@media print {
+    .remark-slide-scaler {
+        width: 100% !important;
+        height: 100% !important;
+        transform: scale(1) !important;
+        top: 0 !important;
+        left: 0 !important;
+    }
+}
+
+body {
+    --dark-bg-color: #0078b2;
+    --dark-text-color: white;
+
+    --light-bg-color: white;
+    --light-text-color: #0078b2;
+}
+
+.light {
+    --text-color: var(--light-text-color);
+    --bg-color: var(--light-bg-color);
+    background-image: url("tescan-dark.svg");
+}
+
+.dark {
+    --text-color: var(--dark-text-color);
+    --bg-color: var(--dark-bg-color);
+    background-image: url("tescan-light.svg");
+    color: var(--text-color);
+}
+
+body {
+    --text-color: #0078b2;
+    --bg-color: white;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 900;
+    color: var(--text-color);
+}
+
+h1 {
+    margin: 1rem 0;
+}
+
+a {
+    color: var(--text-color);
+}
+
+.tescan-logo {
+    width: auto;
+    height: 5vh;
+}
+
+.remark-slide-content.main {
+    background-position: 2% 2%;
+    background-size: auto 8%;
+    background-color: var(--bg-color);
+    text-align: center;
+    padding-top: 15vh;
+}
+
+.remark-slide-content {
+    background-image: url("tescan-dark.svg");
+    background-position: 98% 2%;
+    background-size: auto 4%;
+    background-color: var(--bg-color);
+}
+
+.remark-slide-content.dark {
+    background-image: url("tescan-light.svg");
+}
+
+.header {
+    position: absolute;
+    top: 2%;
+    opacity: 0.5;
+    font-size: 1rem;
+}
+
+.footer-left {
+    position: absolute;
+    bottom: 5vh;
+    left: 5vw;
+    opacity: 0.5;
+}
+
+.footer-right {
+    position: absolute;
+    bottom: 5vh;
+    right: 5vw;
+    opacity: 0.5;
+}
+
+.remark-slide-content {
+    padding: 1rem 3rem;
+}
+
+.remark-slide-content {
+    font-size: 26px;
+}
+
+.remark-code {
+    font-size: 1rem;
+}
+
+.remark-inline-code {
+    background: #d7f2ff;
+    border: 0.1em solid #8bd8ff;
+    border-radius: 0.4em;
+    padding: 0.1em 0.4em;
+}
+
+.dark .remark-inline-code {
+    background: #004161;
+    border: 0.1rem solid #00334d;
+}
+
+ul li {
+    margin: 1.2rem 0;
+    list-style: none;
+}
+
+li ul li {
+    margin: 0.2em 0;
+    font-size: 0.8em;
+}
+
+ul li::before {
+    content: "\25a0";
+    color: var(--text-color);
+    font-weight: bold;
+    display: inline-block;
+    width: 2em;
+    font-size: 0.5em;
+    vertical-align: middle;
+    margin-left: -1em;
+}
+
+pre {
+    width: 100%;
+}
+
+.cpp-logo {
+    width: 5rem;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20%, 1fr));
+    grid-column-gap: 1rem;
+    grid-row-gap: 1rem;
+    justify-items: stretch;
+    align-items: stretch;
+}
+
+p {
+    margin: 0.6em 0;
+}
+
+blockquote {
+    font-style: italic;
+    border-radius: 0.5em;
+    border: 1px solid var(--text-color);
+    background-color: var(--bg-color);
+    margin: 0;
+    padding: 0 1em;
+}
+
+table {
+    font-size: 1rem;
+    border-collapse: collapse;
+}
+
+table td,
+table th {
+    border: 1px solid var(--text-color);
+    padding: 0.4em;
+}
+
+img {
+    max-width: 100%;
+    max-height: 50vh;
+}
